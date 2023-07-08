@@ -10,7 +10,9 @@
   "dependencies": {
     "@emotion/react": "latest",
     "@emotion/styled": "latest",
+    "@mui/icons-material": "^5.13.7",
     "@mui/material": "latest",
+    "mui-file-input": "^2.0.0",
     "react": "latest",
     "react-dom": "latest"
   },

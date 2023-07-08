@@ -1,20 +1,21 @@
 import * as React from 'react';
-import Container from '@mui/material/Container';
-import Typography from '@mui/material/Typography';
-import Box from '@mui/material/Box';
-import ProTip from './ProTip';
-import Copyright from './Copyright';
+import * as colors from '@mui/material/colors';
+import Grid from '@mui/material/Unstable_Grid2';
+import Header from './Header';
+import CV from './CV';
+import Footer from './Footer';
 
 export default function App() {
   return (
-    <Container maxWidth="sm">
-      <Box sx={{ my: 4 }}>
-        <Typography variant="h4" component="h1" gutterBottom>
-          Material UI Vite.js example
-        </Typography>
-        <ProTip />
-        <Copyright />
-      </Box>
-    </Container>
+    <Grid
+      container
+      sx={{
+        height: '100vh',
+      }}
+    >
+      <Header height={7.5} />
+      <CV height={85} columns={[7, 5]} />
+      <Footer height={7.5} />
+    </Grid>
   );
 }
