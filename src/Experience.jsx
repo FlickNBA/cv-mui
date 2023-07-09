@@ -118,23 +118,6 @@ function ExperienceCard({
   const [expToDisabled, setExpToDisabled] = useState(false);
   const [checkboxChecked, setCheckboxChecked] = useState(false);
   const editForm = useRef(['', '', '', '']);
-  // const handleOpen = () => {
-  //   setOpen(true);
-  //   // console.log(experience);
-  //   //['United States', '1']
-  //   setExpFrom(experience.from);
-  //   if (experience.to === true) {
-  //     setCheckboxChecked(true);
-  //     setExpToDisabled(true);
-  //     setExpTo(Number(2023));
-  //   } else {
-  //     setExpTo(experience.to);
-  //     // console.log('setting exp');
-  //   }
-  //   let expCountry = findCountryByCode(experience.where.split(', ')[1]);
-  //   // console.log(expCountry);
-  //   setCountryModal([expCountry.label, expCountry.code]);
-  // };
   const handleClose = () => setOpen(false);
   let expToString = Number.isInteger(experience.to) ? experience.to : 'NOW';
 
