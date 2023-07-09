@@ -12,25 +12,7 @@ import allCountries from './allCountries.json';
 import Experience from './Experience';
 import TextFieldWithState from './TextFieldWithState';
 import MultilineWithState from './MultilineWithState';
-
-const formatPhoneNumber = (code, number) => {
-  let numberLength = String(number).length;
-  let [threes, anyRest, helperArray, final, connectLast] = [
-    0,
-    0,
-    [...String(number)],
-    [],
-    false,
-  ];
-  if (numberLength % 3 == 1) connectLast = true;
-  threes = numberLength / 3;
-  anyRest = numberLength % 3;
-  for (let i = 0; i < threes; i++) {
-    final.push(helperArray.splice(0, 3).join(''));
-  }
-  if (connectLast) final.push(final.splice(final.length - 2, 2).join(''));
-  return `(+${code}) ${final.join('-')}`;
-};
+import { formatPhoneNumber } from './helperFunctions';
 
 export default function CV({ height, columns }) {
   const [firstName, setFirstName] = useState('Abraham');
@@ -48,7 +30,7 @@ export default function CV({ height, columns }) {
       key: 0,
       company: 'Starbucks',
       position: 'Head Barista',
-      where: 'Miami, US',
+      where: 'Juarez, MX',
       from: 2020,
       to: 2021,
     },
@@ -56,7 +38,7 @@ export default function CV({ height, columns }) {
       key: 1,
       company: 'Microsoft',
       position: 'Live Support',
-      where: 'Boston, US',
+      where: 'Auckland, NZ',
       from: 2021,
       to: 2022,
     },
