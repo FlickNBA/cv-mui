@@ -21,10 +21,10 @@ function removeCard({ allExperience, experience, state }) {
 
 function handleCheckbox({ e, setExpToDisabled, expTo, setExpTo }) {
   if (e.target.checked == true) {
-    console.log('I work here!');
-    setExpToDisabled(true);
+    // console.log('I work here!');
     setExpTo(Number(2023));
-    console.log(expTo);
+    setExpToDisabled(true);
+    // console.log(expTo);
   } else {
     setExpToDisabled(false);
   }
@@ -37,9 +37,11 @@ function saveCard({
   position,
   company,
   city,
+  from,
+  to,
   countryModal,
+  close,
 }) {
-  console.log(position, company, city, countryModal);
   let newExperience = { ...experience };
   if (position.length != 0) {
     newExperience.position = position;
@@ -49,10 +51,53 @@ function saveCard({
   }
   if (city.length != 0) {
     newExperience.where = [city, countryModal[1]].join(', ');
+  } else {
+    newExperience.where = [
+      newExperience.where.split(', ')[0],
+      countryModal[1],
+    ].join(', ');
   }
-  console.log(countryModal);
-  console.log(newExperience);
+  newExperience.from = Number(from);
+  if (Number(to) == 2023) {
+    newExperience.to = true;
+  } else {
+    newExperience.to = Number(to);
+  }
+  // console.log(newExperience);
+  let eCopy = [...allExperience];
+  let index = eCopy.findIndex((e) => e.key == newExperience.key);
+  eCopy[index] = newExperience;
+  state(eCopy);
+  close();
 }
+
+const handleOpen = ({
+  setOpen,
+  setExpFrom,
+  setCheckboxChecked,
+  setExpToDisabled,
+  setExpTo,
+  experience,
+  setCountryModal,
+  findCountryByCode,
+  clean = false,
+}) => {
+  setOpen(true);
+  // console.log(experience);
+  //['United States', '1']
+  setExpFrom(experience.from);
+  if (experience.to === true) {
+    setCheckboxChecked(true);
+    setExpToDisabled(true);
+    setExpTo(Number(2023));
+  } else {
+    setExpTo(experience.to);
+    // console.log('setting exp');
+  }
+  let expCountry = findCountryByCode(experience.where.split(', ')[1]);
+  // console.log(expCountry);
+  setCountryModal([expCountry.label, expCountry.code]);
+};
 
 function ExperienceCard({
   experience,
@@ -73,23 +118,23 @@ function ExperienceCard({
   const [expToDisabled, setExpToDisabled] = useState(false);
   const [checkboxChecked, setCheckboxChecked] = useState(false);
   const editForm = useRef(['', '', '', '']);
-  const handleOpen = (editForm) => {
-    setOpen(true);
-    console.log(experience);
-    //['United States', '1']
-    setExpFrom(experience.from);
-    if (experience.to === true) {
-      setCheckboxChecked(true);
-      setExpToDisabled(true);
-      setExpTo(Number(2023));
-    } else {
-      setExpTo(experience.to);
-      console.log('setting exp');
-    }
-    let expCountry = findCountryByCode(experience.where.split(', ')[1]);
-    console.log(expCountry);
-    setCountryModal([expCountry.label, expCountry.code]);
-  };
+  // const handleOpen = () => {
+  //   setOpen(true);
+  //   // console.log(experience);
+  //   //['United States', '1']
+  //   setExpFrom(experience.from);
+  //   if (experience.to === true) {
+  //     setCheckboxChecked(true);
+  //     setExpToDisabled(true);
+  //     setExpTo(Number(2023));
+  //   } else {
+  //     setExpTo(experience.to);
+  //     // console.log('setting exp');
+  //   }
+  //   let expCountry = findCountryByCode(experience.where.split(', ')[1]);
+  //   // console.log(expCountry);
+  //   setCountryModal([expCountry.label, expCountry.code]);
+  // };
   const handleClose = () => setOpen(false);
   let expToString = Number.isInteger(experience.to) ? experience.to : 'NOW';
 
@@ -186,6 +231,7 @@ function ExperienceCard({
                 disabled={expToDisabled}
                 value={expTo}
                 state={setExpTo}
+                setValue={true}
               />
             </Grid>
           </Grid>
@@ -223,7 +269,10 @@ function ExperienceCard({
                   position: position,
                   company: company,
                   city: city,
+                  from: expFrom,
+                  to: expTo,
                   countryModal: countryModal,
+                  close: handleClose,
                 })
               }
             >
@@ -288,6 +337,13 @@ function ExperienceCard({
             variant='outlined'
             onClick={(e) =>
               handleOpen({
+                setOpen: setOpen,
+                setExpFrom: setExpFrom,
+                setCheckboxChecked: setCheckboxChecked,
+                setExpToDisabled: setExpToDisabled,
+                setExpTo: setExpTo,
+                setCountryModal: setCountryModal,
+                findCountryByCode: findCountryByCode,
                 e: e,
                 allExperience: allExperience,
                 experience: experience,
@@ -369,21 +425,85 @@ function ExperienceCard({
 }
 
 export default function Experience({ experience, state, withButtons }) {
-  return (
-    <Grid container columns={3} spacing={1}>
-      {experience.map((exp) => {
-        //console.log(exp);
-        return (
-          <Grid xs={1}>
-            <ExperienceCard
-              experience={exp}
-              allExperience={experience}
-              state={state}
-              withButtons={withButtons}
-            />
-          </Grid>
-        );
-      })}
-    </Grid>
+  let [sx, variant] = ['', ''];
+  if (withButtons) {
+    variant = 'h4';
+    sx = {
+      display: 'inline',
+      marginBottom: '1rem',
+      marginLeft: '0.5rem',
+      marginRight: '1rem',
+      fontWeight: 400,
+      color: colors.brown['800'],
+    };
+  } else {
+    variant = 'h3';
+    sx = {
+      marginY: '1rem',
+      color: colors.common['white'],
+    };
+  }
+  return withButtons ? (
+    <>
+      <Typography variant={variant} sx={sx}>
+        Experience
+      </Typography>
+      <Button
+        variant='contained'
+        sx={{
+          marginBottom: '1rem',
+        }}
+        onClick={(e) =>
+          handleOpen({
+            setOpen,
+            setExpFrom,
+            setCheckboxChecked,
+            setExpToDisabled,
+            setExpTo,
+            experience,
+            setCountryModal,
+            findCountryByCode,
+            clean: false,
+          })
+        }
+      >
+        Add new experience
+      </Button>
+
+      <Grid container columns={3} spacing={1}>
+        {experience.map((exp) => {
+          return (
+            <Grid xs={1}>
+              <ExperienceCard
+                experience={exp}
+                allExperience={experience}
+                state={state}
+                withButtons={withButtons}
+              />
+            </Grid>
+          );
+        })}
+      </Grid>
+    </>
+  ) : (
+    <>
+      <Typography variant={variant} sx={sx}>
+        Experience
+      </Typography>
+      <Grid container columns={3} spacing={1}>
+        {experience.map((exp) => {
+          return (
+            <Grid xs={1}>
+              <ExperienceCard
+                experience={exp}
+                allExperience={experience}
+                state={state}
+                withButtons={withButtons}
+              />
+            </Grid>
+          );
+        })}
+      </Grid>
+    </>
   );
 }

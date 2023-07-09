@@ -147,17 +147,6 @@ export default function CV({ height, columns }) {
             />
           </Grid>
         </Grid>
-        <Typography
-          variant='h4'
-          sx={{
-            marginBottom: '1rem',
-            marginLeft: '0.5rem',
-            fontWeight: 400,
-            color: colors.brown['800'],
-          }}
-        >
-          Experience
-        </Typography>
         <Experience
           experience={experience}
           state={setExperience}
@@ -224,15 +213,6 @@ export default function CV({ height, columns }) {
             />
           </Grid>
         </Grid>
-        <Typography
-          variant='h3'
-          sx={{
-            marginY: '1rem',
-            color: colors.common['white'],
-          }}
-        >
-          Experience
-        </Typography>
         <Experience
           experience={experience}
           state={setExperience}
