@@ -162,6 +162,7 @@ export default function CV({ height, columns }) {
           experience={experience}
           state={setExperience}
           withButtons={true}
+          key={Number(true)}
         />
       </Grid>
 
@@ -236,6 +237,7 @@ export default function CV({ height, columns }) {
           experience={experience}
           state={setExperience}
           withButtons={false}
+          key={Number(false)}
         />
       </Grid>
     </>
